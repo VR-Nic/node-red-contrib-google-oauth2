@@ -91,7 +91,7 @@ module.exports = function(RED) {
             refresh_token: node.config.credentials.refreshToken,
             scope: node.config.scopes.replace(/\n/g, " "),
             token_type: node.config.credentials.tokenType,
-            expiry_date: node.config.credentials.expireTime 
+            expiry_date: node.config.credentials.expireTime
         });
         oauth2Client.on('tokens', (tokens) => {
             if (tokens.refresh_token) {
@@ -115,11 +115,14 @@ module.exports = function(RED) {
             });
 
             var props = node.operation.split('.');
+            console.log(props);
             var operation = api;
+            console.log(operation);
             props.forEach(function(val) {
                 operation = operation[val];
             });
-
+            console.log(operation);
+            console.log(msg.payload);
             operation(msg.payload, function(err, res) {
 
                 if (err) {
