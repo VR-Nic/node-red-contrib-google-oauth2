@@ -91,7 +91,7 @@ module.exports = function(RED) {
             refresh_token: node.config.credentials.refreshToken,
             scope: node.config.scopes.replace(/\n/g, " "),
             token_type: node.config.credentials.tokenType,
-            expiry_date: node.config.credentials.expireTime 
+            expiry_date: node.config.credentials.expireTime
         });
         oauth2Client.on('tokens', (tokens) => {
             if (tokens.refresh_token) {
@@ -116,18 +116,19 @@ module.exports = function(RED) {
 
             var props = node.operation.split('.');
             var operation = api;
+
             props.forEach(function(val) {
                 operation = operation[val];
             });
 
-            operation(msg.payload, function(err, res) {
-
+            operation.bind(api)(msg.payload, function(err, res) {
                 if (err) {
                     node.status({
                         fill: 'red',
                         shape: 'dot',
                         text: 'error'
                     });
+
                     node.error(err);
                     return;
                 }
@@ -137,6 +138,7 @@ module.exports = function(RED) {
                     shape: 'dot',
                     text: 'success'
                 });
+
                 msg.payload = res.data;
                 node.send(msg);
             });
