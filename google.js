@@ -133,7 +133,7 @@ module.exports = function(RED) {
             console.log(operation);
             console.log('Payload');
             console.log(msg.payload);
-            operation(msg.payload, function(err, res) {
+            /*operation(msg.payload, function(err, res) {
 
                 if (err) {
                     node.status({
@@ -150,6 +150,27 @@ module.exports = function(RED) {
                     shape: 'dot',
                     text: 'success'
                 });
+                msg.payload = res.data;
+                node.send(msg);
+            });*/
+            operation.bind(api)(msg.payload, function(err, res) {
+                if (err) {
+                    node.status({
+                        fill: 'red',
+                        shape: 'dot',
+                        text: 'error'
+                    });
+                    
+                    node.error(err);
+                    return;
+                }
+
+                node.status({
+                    fill: 'yellow',
+                    shape: 'dot',
+                    text: 'success'
+                });
+
                 msg.payload = res.data;
                 node.send(msg);
             });
