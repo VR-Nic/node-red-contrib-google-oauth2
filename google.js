@@ -115,44 +115,12 @@ module.exports = function(RED) {
             });
 
             var props = node.operation.split('.');
-            console.log('Props');
-            console.log(props);
             var operation = api;
-            console.log('Operation as API');
-            console.log(operation);
-            if(operation.hasOwnProperty('Gmail')){
-                console.log('Gmail operation');
-            }
-            else {
-                console.log('Not a gmail operation');
-            }
+
             props.forEach(function(val) {
                 operation = operation[val];
             });
-            console.log('Final operation');
-            console.log(operation);
-            console.log('Payload');
-            console.log(msg.payload);
-            /*operation(msg.payload, function(err, res) {
 
-                if (err) {
-                    node.status({
-                        fill: 'red',
-                        shape: 'dot',
-                        text: 'error'
-                    });
-                    node.error(err);
-                    return;
-                }
-
-                node.status({
-                    fill: 'yellow',
-                    shape: 'dot',
-                    text: 'success'
-                });
-                msg.payload = res.data;
-                node.send(msg);
-            });*/
             operation.bind(api)(msg.payload, function(err, res) {
                 if (err) {
                     node.status({
@@ -160,7 +128,7 @@ module.exports = function(RED) {
                         shape: 'dot',
                         text: 'error'
                     });
-                    
+
                     node.error(err);
                     return;
                 }
